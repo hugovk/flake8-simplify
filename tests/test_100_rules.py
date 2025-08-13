@@ -1,5 +1,5 @@
 # Core Library
-from typing import Iterable
+from collections.abc import Iterable
 
 # Third party
 import pytest

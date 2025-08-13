@@ -1,7 +1,6 @@
 # Core Library
 import ast
 from collections import defaultdict
-from typing import Dict, List, Tuple
 
 # First party
 from flake8_simplify.constants import BOOL_CONST_TYPES
@@ -14,9 +13,9 @@ from flake8_simplify.utils import (
 
 def get_sim101(
     node: ast.BoolOp,
-) -> List[Tuple[int, int, str]]:
+) -> list[tuple[int, int, str]]:
     """Get a positions where the duplicate isinstance problem appears."""
-    errors: List[Tuple[int, int, str]] = []
+    errors: list[tuple[int, int, str]] = []
     if not isinstance(node.op, ast.Or):
         return errors
 
@@ -29,7 +28,7 @@ def get_sim101(
     return errors
 
 
-def get_sim109(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
+def get_sim109(node: ast.BoolOp) -> list[tuple[int, int, str]]:
     """
     Check if multiple equalities with the same value are combined via "or".
 
@@ -49,7 +48,7 @@ def get_sim109(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
                 ],
         )
     """
-    errors: List[Tuple[int, int, str]] = []
+    errors: list[tuple[int, int, str]] = []
     if not isinstance(node.op, ast.Or):
         return errors
     equalities = [
@@ -59,7 +58,7 @@ def get_sim109(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
         and len(value.ops) == 1
         and isinstance(value.ops[0], ast.Eq)
     ]
-    id2vals: Dict[str, List[ast.Name]] = defaultdict(list)
+    id2vals: dict[str, list[ast.Name]] = defaultdict(list)
     for eq in equalities:
         if (
             isinstance(eq.left, ast.Name)
@@ -85,7 +84,7 @@ def get_sim109(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
     return errors
 
 
-def get_sim220(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
+def get_sim220(node: ast.BoolOp) -> list[tuple[int, int, str]]:
     """
     Get a list of all calls of the type "a and not a".
 
@@ -100,7 +99,7 @@ def get_sim220(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
         ],
     )
     """
-    errors: List[Tuple[int, int, str]] = []
+    errors: list[tuple[int, int, str]] = []
     if not (isinstance(node.op, ast.And) and len(node.values) >= 2):
         return errors
     # We have a boolean And. Let's make sure there is two times the same
@@ -125,7 +124,7 @@ def get_sim220(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
     return errors
 
 
-def get_sim221(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
+def get_sim221(node: ast.BoolOp) -> list[tuple[int, int, str]]:
     """
     Get a list of all calls of the type "a or not a".
 
@@ -140,7 +139,7 @@ def get_sim221(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
         ],
     )
     """
-    errors: List[Tuple[int, int, str]] = []
+    errors: list[tuple[int, int, str]] = []
     if not (isinstance(node.op, ast.Or) and len(node.values) >= 2):
         return errors
     # We have a boolean OR. Let's make sure there is two times the same
@@ -165,7 +164,7 @@ def get_sim221(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
     return errors
 
 
-def get_sim222(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
+def get_sim222(node: ast.BoolOp) -> list[tuple[int, int, str]]:
     """
     Get a list of all calls of the type "... or True".
 
@@ -180,7 +179,7 @@ def get_sim222(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
         ],
     )
     """
-    errors: List[Tuple[int, int, str]] = []
+    errors: list[tuple[int, int, str]] = []
     if not (isinstance(node.op, ast.Or)):
         return errors
 
@@ -192,7 +191,7 @@ def get_sim222(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
     return errors
 
 
-def get_sim223(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
+def get_sim223(node: ast.BoolOp) -> list[tuple[int, int, str]]:
     """
     Get a list of all calls of the type "... and False".
 
@@ -207,7 +206,7 @@ def get_sim223(node: ast.BoolOp) -> List[Tuple[int, int, str]]:
         ],
     )
     """
-    errors: List[Tuple[int, int, str]] = []
+    errors: list[tuple[int, int, str]] = []
     if not (isinstance(node.op, ast.And)):
         return errors
 
